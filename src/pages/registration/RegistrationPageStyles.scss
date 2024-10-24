@@ -1,0 +1,29 @@
+.reg-page{
+    &__form{
+        min-width: 400px;
+        border-radius: 4px;
+        box-shadow: 0 0 6px 0px #00000024;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        min-height: 250px;
+    }
+    &__title{
+        font-size: 24px;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+    }
+    &__fields{
+        margin-bottom: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    &__actions{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}

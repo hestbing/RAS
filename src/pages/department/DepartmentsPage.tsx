@@ -52,7 +52,7 @@ export const DepartmentsPage: FC = () => {
                         <div>+</div>
                     </div>
                     <div>
-                        <div>Личные данные данные</div>
+                        <div>Личные данные данные данные</div>
                         <div>Данные о работе</div>
                     </div>
                 </div>

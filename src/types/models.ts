@@ -6,7 +6,7 @@ export interface Education {
 
 export interface WorkExperience {
     id: number;
-    title: string;
+    workedYears: string;
     description?: string;
 }
 

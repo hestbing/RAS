@@ -4,9 +4,9 @@ export interface Education {
     description: string;
 }
 
-export interface WorkExperience {
+export interface WorkExpirience {
     id: number;
-    workedYears: string;
+    workedYears: number;
     description?: string;
 }
 
@@ -19,7 +19,7 @@ export interface Employee {
     phoneNumber: string;
     birthDate: string;
     education: Array<Education>;
-    workExpirience: Array<WorkExperience>;
+    workExpirience: Array<WorkExpirience>;
 }
 
 export interface Department {

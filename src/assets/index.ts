@@ -1,1 +1,1 @@
-export { LogoIcon, UserIcon } from './icons';
+export { LogoIcon, UserIcon, TrashIcon, PencilIcon, UploadIcon } from './icons';

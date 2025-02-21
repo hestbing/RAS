@@ -7,3 +7,5 @@ export { Layout } from "./layots";
 export { UserMenu } from './userMenu';
 export { EmployeesList } from './employeesList';
 export { Dialog } from './dialog';
+export { EducationList } from "./educationList";
+export { WorkExperienceList } from "./workExperienceList";

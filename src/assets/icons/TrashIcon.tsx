@@ -24,7 +24,7 @@ export const TrashIcon: FC<IconProps> = props =>{
             8.27064 5.18807L8 6M18 6V16.2C18 17.8802 18 18.7202 17.673 19.362C17.3854 19.9265 16.9265 20.3854 
             16.362 20.673C15.7202 21 14.8802 21 13.2 21H10.8C9.11984 21 8.27976 21 7.63803 20.673C7.07354 20.3854 
             6.6146 19.9265 6.32698 19.362C6 18.7202 6 17.8802 6 16.2V6M14 10V17M10 10V17" 
-            stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
     )
 } 

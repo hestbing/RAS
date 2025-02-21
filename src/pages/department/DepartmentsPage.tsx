@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from "react";
-import { EmployeesList, Layout, DropDown, Button, Dialog, TextField, FilesList } from "../../componets";
+import { EmployeesList, Layout, DropDown, Button, Dialog, TextField, FilesList, EducationList, WorkExperienceList } from "../../componets";
 import { Employee, Department } from "../../types/models";
 import { DropDownItem } from "../../componets/dropDown/DropDownProps";
 import { UploadIcon } from "../../assets";
-import './departmentsPageStyles.scss';
 import { format } from "date-fns";
+import { PlusIcon } from "../../assets";
+import './departmentsPageStyles.scss';
 
 const fakeEmployeesData = [
     {id: 1, lastName: 'Иванов', firstName: 'Иван', midleName: 'Иванович', birthDate: new Date().toISOString(), email: 'ivanov1@ivan.com', phoneNumber: '1-900-555-55-55'},
@@ -235,6 +236,7 @@ export const DepartmentsPage: FC = () => {
                     </div>
                     <div className="dep-page__user-add-info">
                         <div className="dep-page__user-add-info-files"> 
+                            <span className="dep-page__label" >Прикрепленные данные</span>
                             <FilesList 
                                 onFileDownload={downloadFileHendler}
                                 onFileDelete={deleteFileHendler}
@@ -249,8 +251,36 @@ export const DepartmentsPage: FC = () => {
                                 }]}/>
                         </div>
                         <div className="dep-page__user-add-info-data">
-                            <div className="dep-page__user-add-info-data__cell"> Edu </div>
-                            <div className="dep-page__user-add-info-data__cell"> Wrk </div>
+                            <div className="dep-page__user-add-info-data__cell">
+                                <div className="dep-page__list-title">
+                                    <span className="dep-page__label">Данные об образовании</span>
+                                    <PlusIcon width={16} height={16} />
+                                </div>    
+                                <EducationList educationList={[{
+                                    id: 1,
+                                    title: 'Высшее образование',
+                                    description: 'Инженер-программист'
+                                },{
+                                    id: 2,
+                                    title: 'Низшее образование',
+                                    description: 'Системный администратор'
+                                }]} />
+                            </div>
+                            <div className="dep-page__user-add-info-data__cell"> 
+                                <div className="dep-page__list-title">
+                                    <span className="dep-page__label">Данные о работе</span>
+                                    <PlusIcon width={16} height={16} />
+                                </div>
+                                <WorkExperienceList workExperienceList={[{
+                                    id: 1,
+                                    workedYears: 3,
+                                    description: 'Завод 1'
+                                },{
+                                    id: 2,
+                                    workedYears: 2,
+                                    description: 'Завод 2'
+                                }]} />
+                            </div>
                         </div>
                     </div>
                 </div>

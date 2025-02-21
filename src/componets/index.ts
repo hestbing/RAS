@@ -1,3 +1,4 @@
+export { FilesList } from './filesList';
 export { DropDown } from './dropDown';
 export { Button } from "./button";
 export { TextField } from "./textField";

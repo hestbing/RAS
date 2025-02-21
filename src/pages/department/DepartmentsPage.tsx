@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import { EmployeesList, Layout, DropDown, Button, Dialog, TextField } from "../../componets";
+import { EmployeesList, Layout, DropDown, Button, Dialog, TextField, FilesList } from "../../componets";
 import { Employee, Department } from "../../types/models";
 import { DropDownItem } from "../../componets/dropDown/DropDownProps";
 import { UploadIcon } from "../../assets";
 import './departmentsPageStyles.scss';
+import { format } from "date-fns";
 
 const fakeEmployeesData = [
     {id: 1, lastName: 'Иванов', firstName: 'Иван', midleName: 'Иванович', birthDate: new Date().toISOString(), email: 'ivanov1@ivan.com', phoneNumber: '1-900-555-55-55'},
@@ -167,6 +168,14 @@ export const DepartmentsPage: FC = () => {
 
     }
 
+    const downloadFileHendler = (id: number) => {
+
+    }
+
+    const deleteFileHendler = (id: number) => {
+        alert(id)
+    }
+
     return(
         <Layout>
             <Dialog title={userActionMode !== 'edit' ? 'Добавить сотрудника' : 'Изменить сотрудника'}
@@ -204,7 +213,11 @@ export const DepartmentsPage: FC = () => {
                             <div className='dep-page__user-info-pers-data'>
                                 <div>
                                     <strong>Дата рождения: </strong>
-                                    <span>{selectedEmployee?.birthDate ?? '-'}</span>
+                                    <span>{
+                                        selectedEmployee?.birthDate 
+                                            ? format(new Date(selectedEmployee.birthDate), 'dd.MM.yyyy')
+                                            : '-'
+                                    }</span>
                                 </div>
                                 <div>
                                     <strong>Почта: </strong>
@@ -220,10 +233,25 @@ export const DepartmentsPage: FC = () => {
                             <UploadIcon onClick={uploadFileHendler}/>
                         </div>
                     </div>
-                    <div>
-                        <div> Files list </div>
-                        <div> Edu </div>
-                        <div> Wrk </div>
+                    <div className="dep-page__user-add-info">
+                        <div className="dep-page__user-add-info-files"> 
+                            <FilesList 
+                                onFileDownload={downloadFileHendler}
+                                onFileDelete={deleteFileHendler}
+                                filesList={[{
+                                    id: 1,
+                                    displayName: 'my_file.txt',
+                                    systemName: 'sadoif'
+                                },{
+                                    id: 2,
+                                    displayName: 'my_file2.txt',
+                                    systemName: 'dsafadsf'
+                                }]}/>
+                        </div>
+                        <div className="dep-page__user-add-info-data">
+                            <div className="dep-page__user-add-info-data__cell"> Edu </div>
+                            <div className="dep-page__user-add-info-data__cell"> Wrk </div>
+                        </div>
                     </div>
                 </div>
             </div>

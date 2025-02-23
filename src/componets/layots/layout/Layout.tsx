@@ -1,12 +1,14 @@
 import { FC } from "react";
 import { LayoutProps } from "./LayoutProps";
-import "./LayoutStyles.scss"
 import { LogoIcon } from "../../../assets";
 import { UserMenu } from "../../userMenu";
+import { RoutesPaths } from "../../../constants/CommonConstants";
+import { useNavigate } from "react-router-dom";
+import "./LayoutStyles.scss"
 
 export const Layout: FC<LayoutProps> = props => {
     const{footer, headerChild, title, children} = props;
-        
+    const navigate = useNavigate()
 
     return(
         <div className="layout">
@@ -21,7 +23,7 @@ export const Layout: FC<LayoutProps> = props => {
                 <div className="layout__user-menu">
                     <UserMenu items={[{
                         id: 'Go_to_administration',
-                        action: () =>{},
+                        action: () => navigate(`/${RoutesPaths.Administration}`),
                         label: 'Администрирование'
                     },{
                         id: 'exit',

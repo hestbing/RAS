@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { UserIcon } from "../../assets";
-import './UserMenuStyless.scss';
 import { UserMenuProps } from "./UserMenuProps";
+import './UserMenuStyless.scss';
 
 export const UserMenu: FC<UserMenuProps> = props => {
     const {items} = props; 

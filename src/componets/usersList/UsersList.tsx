@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { UsersListProps } from "./UsersListProps";
 import { Button } from "../../componets";
+import './userListStyles.scss';
 
 
 export const UsersList: FC<UsersListProps> = props => {

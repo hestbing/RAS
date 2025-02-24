@@ -3,6 +3,7 @@ import { User } from '../../types/models'
 import { useNavigate } from 'react-router-dom'
 import { Layout, Button, UsersList} from '../../componets'
 import { RoutesPaths } from '../../constants/CommonConstants'
+import './administrationPageStyles.scss'
 
 const fakeUsersListData: Array<User> =[{
     id: 1,
@@ -68,7 +69,7 @@ export const AdministrationPage: FC = () => {
         <Layout title='Администрирование'>
             <Button text='На главную'
             onClick={() => navigate(`/${RoutesPaths.Departments}`)}
-            className='navigate.btn'
+            className='button'
             type='primary'/>
             <UsersList onSetAdminRole = {setAdminRoleHandler}
                 onSetManagerRole = {setManagerRoleHandler}

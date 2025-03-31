@@ -24,7 +24,7 @@ export const PencilIcon: FC<IconProps> = props =>{
             19.4723C6.49475 19.6503 6.14115 19.7868 5.43395 20.0599L3 20.9998L3.78312 18.6501C4.05039 
             17.8483 4.18403 17.4473 4.3699 17.0729C4.53497 16.7404 4.73054 16.424 4.95409 16.1276C5.20582 
             15.7939 5.50466 15.4951 6.10235 14.8974Z" 
-            stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
     )
 } 

@@ -5,11 +5,13 @@ import { WidgetLayout } from '../../componets';
 import "./LoginPageStyles.scss";
 import { useNavigate } from 'react-router-dom';
 import { RoutesPaths } from '../../constants/CommonConstants';
+import { Auth  } from '../../api/auth'
 
 export const LoginPage: FC = () => {
 
     const [login, setLogin] = useState <string>('');
-    const [password, setPassword] = useState <string>(''); 
+    const [password, setPassword] = useState <string>('');
+    const { signIn } = Auth;
 
     const navigate = useNavigate();
 
@@ -26,11 +28,21 @@ export const LoginPage: FC = () => {
     };
 
     const loginHandler = () => {
-        console.log({
+        // console.log({
+        //     login,
+        //     password
+        // });
+        // navigate(RoutesPaths.Departments);
+
+        signIn({
             login,
             password
-        });
-        navigate(RoutesPaths.Departments);
+        }).then((resp) => {
+            console.log(resp)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
 
     return (

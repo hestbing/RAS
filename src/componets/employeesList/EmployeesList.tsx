@@ -1,12 +1,12 @@
 import { FC, useState } from "react";
-import { EmployeesListProps } from "./EmployeesListProps";
-import './employeesListStyles.scss'
+import { VisitorsListProps } from "./EmployeesListProps";
 import clsx from 'classnames';
 import { PencilIcon, TrashIcon } from "../../assets/icons";
+import './employeesListStyles.scss'
 
 
-export const EmployeesList: FC<EmployeesListProps> = props =>{
-    const {employeesList, onItemClick, onItemDelete, onItemEdit} = props
+export const EmployeesList: FC<VisitorsListProps> = props => {
+    const {visitorsList, onItemClick, onItemDelete, onItemEdit} = props
     const [selectedUser, setSelectedUser] = useState(0)
 
     const employeeClickHandler = (id: number) => {
@@ -14,11 +14,11 @@ export const EmployeesList: FC<EmployeesListProps> = props =>{
         onItemClick && onItemClick(id)
     }
 
-    const employeeEditHandler = (id: number) =>{
+    const employeeEditHandler = (id: number) => {
         onItemEdit && onItemEdit(id)
     }
 
-    const employeeDeleteHandler = (id: number) =>{
+    const employeeDeleteHandler = (id: number) => {
         onItemDelete && onItemDelete(id)
     }
 
@@ -26,13 +26,13 @@ export const EmployeesList: FC<EmployeesListProps> = props =>{
 
     return(
         <div className="empl-list">
-            {employeesList.map(user =>{
+            {visitorsList.map(user =>{
                     return(
                         <div key={user.id} 
                         className={clsx('empl-list__item', {'empl-list__item_selected': isSelected(user.id)})}
                         onClick={() => employeeClickHandler(user.id)}>
                             <div className="empl-list__item-fio">
-                                {`${user.lastName} ${user.firstName} ${user.midleName ?? ''}`.trim()}
+                                {`${user.nameSubject} ${user.nameTeacher} группа ${user.nameGroup}`.trim()}
                             </div>
                             <div className="empl-list__item-action">
                                 <PencilIcon width={18} height={18} onClick={() => {employeeEditHandler(user.id)}}/>

@@ -6,7 +6,7 @@ export const AxiosInstance = (accessToken: string = '') => {
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': 'true',
-            'Authorization': `Bearer ${''}`
+            'Authorization': `Bearer ${accessToken}`
         },
     });
 

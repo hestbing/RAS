@@ -19,6 +19,13 @@
         }
     }
 
+    &__add-btn{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     &__label { 
         padding: 0 10px;
         font-weight: 600;

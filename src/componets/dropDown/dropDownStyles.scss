@@ -1,10 +1,11 @@
 @import'../../styles/varibles.scss';
 
 .drop-down{
-
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    max-width: 80%;
 
     &__lbl{
         color: $color-lbl;

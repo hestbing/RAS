@@ -1,57 +1,20 @@
 import { FC, useEffect, useState } from "react";
-import { EmployeesList, Layout, DropDown, Button, Dialog, TextField, FilesList, EducationList, WorkExperienceList } from "../../componets";
-import { Employee, Department } from "../../types/models";
+import { EmployeesList, Layout, DropDown, Button, Dialog, TextField, FilesList, StudDepartmentList, WorkExperienceList } from "../../componets";
+import { Department, Visitors } from "../../types/models";
 import { DropDownItem } from "../../componets/dropDown/DropDownProps";
 import { UploadIcon } from "../../assets";
 import { format } from "date-fns";
-import { PlusIcon } from "../../assets";
+import { PlusIcon, PencilIcon, TrashIcon } from "../../assets";
+import { FucultiesApi } from "../../api";
 import './departmentsPageStyles.scss';
 
-const fakeEmployeesData = [
-    {id: 1, lastName: 'Иванов', firstName: 'Иван', midleName: 'Иванович', birthDate: new Date().toISOString(), email: 'ivanov1@ivan.com', phoneNumber: '1-900-555-55-55'},
-    {id: 2, lastName: 'Иванов', firstName: 'Иван', midleName: 'Иванович', birthDate: new Date().toISOString(), email: 'ivanov2@ivan.com', phoneNumber: '2-900-555-55-55'},
-    {id: 3, lastName: 'Иванов', firstName: 'Иван', birthDate: new Date().toISOString(), email: 'ivanov3@ivan.com', phoneNumber: '3-900-555-55-55', 
-        education: [{
-            id: 1,
-            description: 'ФИТГБ',
-            title: 'ВГТУ'
-        },{
-            id: 2,
-            description: 'Курсы',
-            title: 'Яндекс практикум'
-        },{
-            id: 3,
-            description: 'Практика',
-            title: 'Завод'
-        }], 
-        workExpirience: [{
-            id: 1,
-            workedYears: 3,
-            description: 'Завод'
-        },{
-            id: 2,
-            workedYears: 2,
-            description: 'Завод 2'
-        },{
-            id: 3,
-            workedYears: 1,
-            description: 'Завод 3'
-        }]},
-    {id: 4, lastName: 'Иванов', firstName: 'Иван', midleName: 'Иванович', birthDate: new Date().toISOString(), email: 'ivanov4@ivan.com', phoneNumber: '4-900-555-55-55'},
-    {id: 5, lastName: 'Иванов', firstName: 'Иван', midleName: 'Иванович', birthDate: new Date().toISOString(), email: 'ivanov5@ivan.com', phoneNumber: '5-900-555-55-55'}
-] as Array<Employee>
-
-const fakeDepartmentsData = [
-    {id: 1, name: 'Отдел 1', employees: []},
-    {id: 2, name: 'Отдел 2', employees: fakeEmployeesData},
-    {id: 3, name: 'Отдел 3', employees: []},
-] as Array<Department>
-
 export const DepartmentsPage: FC = () => {
+    const { getFuculties, deleteFuculties } = FucultiesApi
+
     const [departmentsData, setDepartmentsData] = useState<Array<Department>>([])
-    const [employeesData, setEmployeesData] = useState<Array<Employee>>([])
+    const [employeesData, setEmployeesData] = useState<Array<Visitors>>([])
     const [selectedDepartmentId, setSelectedDepartmentId] = useState<number>()
-    const [selectedEmployee, setSelectedEmployee] = useState<Employee>()
+    const [selectedVisitors, setSelectedVisitors] = useState<Visitors>()
     const [showEmployeeDialog, setShowEmployeeDialog] = useState(false)
     const [userActionMode, setUserActionMode] = useState<'create' | 'edit'>('create')
     const [userToEdit, setUserToEdit] = useState(0)
@@ -64,23 +27,23 @@ export const DepartmentsPage: FC = () => {
     const [phoneNumber, setPhoneNumber] = useState('')
 
     useEffect(() => {
-        setTimeout(() => {
-            setDepartmentsData(fakeDepartmentsData);
-            if(Array.isArray(fakeDepartmentsData) && fakeDepartmentsData.length){
-                setSelectedDepartmentId(fakeDepartmentsData[0].id)
+        getFuculties()
+        .then(respData => {
+            setDepartmentsData(respData)
+            if(respData.length){
+                setSelectedDepartmentId(respData[0].id)
             }
-        }, 2000)
-    }, [])
+        }).catch(err => {
+            setDepartmentsData([])
+            console.log(err)
+        })
+    }, [getFuculties])
 
     useEffect(() => {
         const selectedDepartment = departmentsData.find (d => d.id === selectedDepartmentId);
-        setEmployeesData(selectedDepartment ? selectedDepartment.employees : []);
-        setSelectedEmployee(undefined)
+        setEmployeesData(selectedDepartment ? selectedDepartment.visitors : []);
+        setSelectedVisitors(undefined)
     }, [departmentsData, selectedDepartmentId])
-
-    useEffect (() => {
-        setEmployeesData(fakeEmployeesData);
-    }, [])
 
     useEffect(() =>{
         if(userActionMode === 'edit') {
@@ -88,13 +51,13 @@ export const DepartmentsPage: FC = () => {
                 ? employeesData.find(e => e.id === userToEdit)
                 : undefined;
             
-            setLastName(employee?.lastName ?? '')
-            setFirstName(employee?.firstName ?? '')
-            setMidleName(employee?.midleName ?? '')
+            setLastName(employee?.nameSubject ?? '')
+            setFirstName(employee?.nameTeacher ?? '')
+            setMidleName(employee?.numberStudent ?? '')
 
-            setBirthDate(employee?.birthDate ?? '')
-            setEmail(employee?.email ?? '')
-            setPhoneNumber(employee?.phoneNumber ?? '')
+            setBirthDate(employee?.date ?? '')
+            setEmail(employee?.dayWeek ?? '')
+            setPhoneNumber(employee?.numberVisitors ?? '')
         }
     }, [employeesData, userActionMode, userToEdit])
 
@@ -155,25 +118,43 @@ export const DepartmentsPage: FC = () => {
 
     const onEmployeeSelectedHandler = (id: number) =>{
         const employee = employeesData.find(e => e.id === id)
-        setSelectedEmployee(employee);
+        setSelectedVisitors(employee);
     }
 
     const getFIO = () =>{
-        if(!selectedEmployee){
+        if(!selectedVisitors){
             return ''
         }
-        return `${selectedEmployee.lastName} ${selectedEmployee.firstName} ${selectedEmployee.midleName ?? ''}`.trim()
+        return `${selectedVisitors.nameSubject} ${selectedVisitors.nameTeacher} гр. ${selectedVisitors.nameGroup}, количество студентов ${selectedVisitors.numberStudent} `.trim()
     }
 
-    const uploadFileHendler = () => {
+    const deleteFucultiesHandler = () => {
+        if(!window.confirm('Вы действительно хотите удалить данный факультет?')) {
+            return
+        }
+        if(!selectedDepartmentId){
+            return
+        }
+
+        deleteFuculties(selectedDepartmentId).then(() =>{
+            setDepartmentsData(prev => {
+                const filtered = prev.filter(d => d.id !== selectedDepartmentId)
+                return [...filtered]
+            })
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    const uploadFileHandler = () => {
 
     }
 
-    const downloadFileHendler = (id: number) => {
+    const downloadFileHandler = (id: number) => {
 
     }
 
-    const deleteFileHendler = (id: number) => {
+    const deleteFileHandler = (id: number) => {
         alert(id)
     }
 
@@ -187,23 +168,29 @@ export const DepartmentsPage: FC = () => {
                     </Dialog>  
             <div className="dep-page">
                 <div className="dep-page__users-list-container">
-                    <DropDown items ={departmentsData.map(dd => {
-                        return{
-                            text: dd.name,
-                            value: dd.id.toString()
-                        } as DropDownItem
-                    })} 
-                        label="Отделы"
-                        selectedChanged={(val) => departmentChangeHandler(val)}
-                    />
-                    <div>
-                        Список сотрудников
+                    <div className="dep-page__add-btn">
+                        <DropDown
+                        items ={departmentsData.map(dd => {
+                            return{
+                                text: dd.name,
+                                value: dd.id.toString()
+                            } as DropDownItem
+                        })} 
+                            label="Факультеты"
+                            selectedChanged={(val) => departmentChangeHandler(val)}
+                        />
+                        <PlusIcon width={16} height={16} />
+                        <PencilIcon width={16} height={16} />
+                        <TrashIcon width={16} height={16} onClick={deleteFucultiesHandler}/>
                     </div>
-                    <EmployeesList employeesList = {employeesData}
+                    <div>
+                        Список занятий
+                    </div>
+                    <EmployeesList visitorsList = {employeesData}
                     onItemClick={(id) => onEmployeeSelectedHandler(id)}
                     onItemDelete={(id) => console.log('delete', id)}
                     onItemEdit={editEmployeeHandler}/>
-                    <Button text="Добавить сотрудника" className="dep-page__add-user-btn" onClick={createEmployeeHandler}/>
+                    <Button text="Добавить занятие" className="dep-page__add-user-btn" onClick={createEmployeeHandler}/>
                 </div>
                 <div className='dep-page__user-info-container'>      
                     <div className='dep-page__user-info-header'>
@@ -213,33 +200,33 @@ export const DepartmentsPage: FC = () => {
                             </div>
                             <div className='dep-page__user-info-pers-data'>
                                 <div>
-                                    <strong>Дата рождения: </strong>
+                                    <strong>Дата: </strong>
                                     <span>{
-                                        selectedEmployee?.birthDate 
-                                            ? format(new Date(selectedEmployee.birthDate), 'dd.MM.yyyy')
+                                        selectedVisitors?.date 
+                                            ? format(new Date(selectedVisitors.date), 'dd.MM.yyyy')
                                             : '-'
                                     }</span>
                                 </div>
                                 <div>
-                                    <strong>Почта: </strong>
-                                    <span>{selectedEmployee?.email ?? '-'}</span>
+                                    <strong>День недели: </strong>
+                                    <span>{selectedVisitors?.dayWeek ?? '-'}</span>
                                 </div>
                                 <div>
-                                    <strong>Телефон: </strong>
-                                    <span>{selectedEmployee?.phoneNumber ?? '-'}</span>
+                                    <strong>Количество присутствующих: </strong>
+                                    <span>{selectedVisitors?.numberVisitors ?? '-'}</span>
                                 </div>
                             </div>
                         </div>
                         <div className="dep-page__user-info-action">
-                            <UploadIcon onClick={uploadFileHendler}/>
+                            <UploadIcon onClick={uploadFileHandler}/>
                         </div>
                     </div>
                     <div className="dep-page__user-add-info">
                         <div className="dep-page__user-add-info-files"> 
                             <span className="dep-page__label" >Прикрепленные данные</span>
                             <FilesList 
-                                onFileDownload={downloadFileHendler}
-                                onFileDelete={deleteFileHendler}
+                                onFileDownload={downloadFileHandler}
+                                onFileDelete={deleteFileHandler}
                                 filesList={[{
                                     id: 1,
                                     displayName: 'my_file.txt',
@@ -253,18 +240,10 @@ export const DepartmentsPage: FC = () => {
                         <div className="dep-page__user-add-info-data">
                             <div className="dep-page__user-add-info-data__cell">
                                 <div className="dep-page__list-title">
-                                    <span className="dep-page__label">Данные об образовании</span>
+                                    <span className="dep-page__label">Студенты</span>
                                     <PlusIcon width={16} height={16} />
                                 </div>    
-                                <EducationList educationList={[{
-                                    id: 1,
-                                    title: 'Высшее образование',
-                                    description: 'Инженер-программист'
-                                },{
-                                    id: 2,
-                                    title: 'Низшее образование',
-                                    description: 'Системный администратор'
-                                }]} />
+                                <StudDepartmentList StudDepartmentList={selectedVisitors?.students ?? []} />
                             </div>
                             <div className="dep-page__user-add-info-data__cell"> 
                                 <div className="dep-page__list-title">

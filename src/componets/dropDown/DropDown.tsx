@@ -5,7 +5,7 @@ import clsx from 'classnames';
 
 export const DropDown: FC<DropDownProps> = props =>{
 
-    const {items, selectedChanged, label, lblWeight} = props
+    const {items, selectedChanged, label, lblWeight, className} = props
 
     const selectesChangeHandler = (event: ChangeEvent<HTMLSelectElement>) =>{
         selectedChanged && selectedChanged(event.target.value)

@@ -1,11 +1,10 @@
 import { FC } from "react";
-import { EducationListProps } from "./EducationListProps";
-import clsx from 'classnames';
+import { StudDepartmentListProps } from "./StudDepartmentListProps";
 import { TrashIcon } from "../../assets";
-import './educationListStyles.scss'
+import './studDepartmentListStyles.scss'
 
-export const EducationList: FC<EducationListProps> = props =>{
-    const { educationList, onDelete } = props
+export const StudDepartmentList: FC<StudDepartmentListProps> = props =>{
+    const { StudDepartmentList, onDelete } = props
 
     const deleteHandler = (id: number) => {
         onDelete && onDelete(id)
@@ -13,12 +12,12 @@ export const EducationList: FC<EducationListProps> = props =>{
 
     return(
         <div className="education-list">
-            {educationList.map(education => {
+            {StudDepartmentList.map(education => {
                     return(
                         <div key={education.id} className="education-list__item">
                             <div className="education-list__item-descr">
-                                <span className="education-list__item-descr-title">{education.title}</span>
-                                <span className="education-list__item-descr-descrription">{education.description}</span>
+                                <span className="education-list__item-descr-title">{education.fioStudent}</span>
+                                <span className="education-list__item-descr-descrription">{education.examResults}</span>
                             </div>
                             <div className="education-list__item-action">
                                 <TrashIcon width={16} height={16} onClick={() => {deleteHandler(education.id)}}/>

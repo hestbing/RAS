@@ -2,11 +2,11 @@ import { FC, useState } from 'react';
 import { TextField } from '../../componets';
 import { Button } from '../../componets';
 import { WidgetLayout } from '../../componets';
-import "./RegistrationPageStyles.scss";
 import { useNavigate } from 'react-router-dom';
 import { RoutesPaths } from '../../constants/CommonConstants';
-import { Auth } from '../../api';
+import { AuthApi } from '../../api';
 import { AxiosError } from 'axios';
+import "./RegistrationPageStyles.scss";
 
 
 type FormFieldsNames = 'login'|'password'|'repeatePassword'|'lastName'|'firstName'|'midName';
@@ -23,7 +23,7 @@ export const RegistrationPage: FC = () => {
     
     const [formFields, setFormFields] = useState<RegistrationForm>()
     const [errorMessage, setErrorMessage] = useState<string>()
-    const { signUp } = Auth
+    const { signUp, signIn } = AuthApi
 
     const navigate = useNavigate()
     
@@ -41,11 +41,22 @@ export const RegistrationPage: FC = () => {
             return
         }
         
-        signUp({
+        const data = {
             login: formFields?.login,
             password: formFields?.password
-        }).then(() => {
-            navigate(RoutesPaths.Departments);
+        }
+
+        signUp(data).then(() => {
+            signIn(data).then(respData => {
+                if(respData.role === 'user'){
+                    navigate (`/${RoutesPaths.NoPermissions}`)
+                }else{
+                    navigate(`/${RoutesPaths.Departments}`)
+                }
+            }).catch((err) => {
+                setErrorMessage((err as AxiosError)?.message)
+            })
+            
         })
         .catch((err) => {
             setErrorMessage((err as AxiosError)?.message)

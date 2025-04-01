@@ -2,16 +2,16 @@ import { FC, useState } from 'react';
 import { TextField } from '../../componets';
 import { Button } from '../../componets';
 import { WidgetLayout } from '../../componets';
-import "./LoginPageStyles.scss";
 import { useNavigate } from 'react-router-dom';
 import { RoutesPaths } from '../../constants/CommonConstants';
-import { Auth  } from '../../api/auth'
+import { AuthApi  } from '../../api/authApi'
+import "./LoginPageStyles.scss";
 
 export const LoginPage: FC = () => {
 
     const [login, setLogin] = useState <string>('');
     const [password, setPassword] = useState <string>('');
-    const { signIn } = Auth;
+    const { signIn } = AuthApi;
 
     const navigate = useNavigate();
 
@@ -28,17 +28,15 @@ export const LoginPage: FC = () => {
     };
 
     const loginHandler = () => {
-        // console.log({
-        //     login,
-        //     password
-        // });
-        // navigate(RoutesPaths.Departments);
-
         signIn({
             login,
             password
-        }).then((resp) => {
-            console.log(resp)
+        }).then((respData) => {
+            if(respData.role === 'user'){
+                navigate (`/${RoutesPaths.NoPermissions}`)
+            }else{
+                navigate(`/${RoutesPaths.Departments}`)
+            }
         })
         .catch((err) => {
             console.log(err)

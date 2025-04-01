@@ -1,0 +1,1 @@
+export { StudDepartmentList } from "./StudDepartmentList";

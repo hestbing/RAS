@@ -6,9 +6,15 @@ import { UploadIcon } from "../../assets";
 import { format } from "date-fns";
 import { PlusIcon, PencilIcon, TrashIcon } from "../../assets";
 import { FucultiesApi } from "../../api";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxToolkitHooks";
 import './departmentsPageStyles.scss';
+import { useNavigate } from "react-router-dom";
+import { RoutesPaths } from "../../constants/CommonConstants";
 
 export const DepartmentsPage: FC = () => {
+    const { accessToken, role } = useAppSelector((state) => state.user)
+    
+
     const { getFuculties, deleteFuculties } = FucultiesApi
 
     const [departmentsData, setDepartmentsData] = useState<Array<Department>>([])
@@ -25,6 +31,18 @@ export const DepartmentsPage: FC = () => {
     const [birthDate, setBirthDate] = useState('')
     const [email, setEmail] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(accessToken){
+            if(role === 'user' || !role){
+                navigate(`/${RoutesPaths.NoPermissions}`)
+            } 
+        } else {
+            navigate(`${RoutesPaths.Login}`)
+        }
+    },[accessToken, role, navigate])
 
     useEffect(() => {
         getFuculties()
@@ -179,9 +197,12 @@ export const DepartmentsPage: FC = () => {
                             label="Факультеты"
                             selectedChanged={(val) => departmentChangeHandler(val)}
                         />
-                        <PlusIcon width={16} height={16} />
-                        <PencilIcon width={16} height={16} />
-                        <TrashIcon width={16} height={16} onClick={deleteFucultiesHandler}/>
+                        {role === 'admin' && (<>
+                            <PlusIcon width={16} height={16} />
+                            <PencilIcon width={16} height={16} />
+                            <TrashIcon width={16} height={16} onClick={deleteFucultiesHandler}/>
+                            </>
+                        )}
                     </div>
                     <div>
                         Список занятий

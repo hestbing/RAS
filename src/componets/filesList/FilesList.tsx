@@ -7,12 +7,12 @@ import './filesListStyles.scss'
 export const FilesList: FC<FilesListProps> = props =>{
     const {filesList, onFileDelete, onFileDownload} = props
 
-    const downloadHandler = (id: number) => {
-        onFileDownload && onFileDownload(id)
+    const downloadHandler = (displayName: string, systemName: string) => {
+        onFileDownload && onFileDownload(displayName, systemName)
     }
 
-    const deleteHandler = (id: number) => {
-        onFileDelete && onFileDelete(id)
+    const deleteHandler = (systemName: string) => {
+        onFileDelete && onFileDelete(systemName)
     }
 
     return(
@@ -21,11 +21,11 @@ export const FilesList: FC<FilesListProps> = props =>{
                     return(
                         <div key={file.id} className="files-list__item">
                             <div>
-                                {file.displayName}
+                                <span>{file.displayName}</span>
                             </div>
                             <div className="files-list__item-action">
-                                <DownloadIcon width={16} height={16} onClick={() => {downloadHandler(file.id)}}/>
-                                <TrashIcon width={16} height={16} onClick={() => {deleteHandler(file.id)}}/>
+                                <DownloadIcon width={16} height={16} onClick={() => {downloadHandler(file.displayName, file.systemName)}}/>
+                                <TrashIcon width={16} height={16} onClick={() => {deleteHandler(file.systemName)}}/>
                             </div>
                         </div>
                     )

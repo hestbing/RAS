@@ -11,17 +11,11 @@ export interface WorkExpirience {
     description?: string;
 }
 
-// export interface Employee {
-//     id: number;
-//     firstName: string;
-//     lastName: string;
-//     midleName?: string;
-//     email: string;
-//     phoneNumber: string;
-//     birthDate: string;
-//     education: Array<Education>;
-//     workExpirience: Array<WorkExpirience>;
-// }
+export interface UserFiles {
+    id: number;
+    systemName: string;
+    displayName: string;
+}
 
 export interface Fuculty {
     id: number;
@@ -40,14 +34,9 @@ export interface Visitors {
     date: string;
     course: string;
     students: Array<Students>;
-    userFile: Array<UserFile>;
+    userFiles: Array<UserFiles>;
 }
 
-export interface UserFile {
-    id: number;
-    systemName: string;
-    displayName: string;
-}
 
 export interface User {
     id: number;

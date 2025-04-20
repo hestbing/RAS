@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { EmployeesList, Layout, DropDown, Button, Dialog, TextField, FilesList, StudDepartmentList, WorkExperienceList } from "../../componets";
 import { Fuculty, Visitors } from "../../types/models";
 import { DropDownItem } from "../../componets/dropDown/DropDownProps";
@@ -7,10 +7,11 @@ import { format } from "date-fns";
 import { PlusIcon, PencilIcon, TrashIcon } from "../../assets";
 // import { FucultiesApi } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxToolkitHooks";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RoutesPaths } from "../../constants/CommonConstants";
 import './departmentsPageStyles.scss';
-import { addDepart, addFuculties, addVisitors, deleteDepart, deleteFile, deleteFuculties, deleteVisitors, editFuculties, editVisitors, getFuculties } from "../../services";
+import { addDepart, addFuculties, addVisitors, deleteDepart, deleteFile, deleteFuculties, deleteVisitors, editFuculties, editVisitors, getFuculties, uploadFile } from "../../services";
+import { FilesApi } from "../../api";
 
 export const DepartmentsPage: FC = () => {
     const { accessToken, role } = useAppSelector((state) => state.user)
@@ -44,6 +45,8 @@ export const DepartmentsPage: FC = () => {
     const [numberVisitors, setNumberVisitors] = useState('')
     const [date, setDate] = useState('')
     const [course, setCourse] = useState('')
+
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const navigate = useNavigate()
 
@@ -146,7 +149,7 @@ export const DepartmentsPage: FC = () => {
                 ...savingVisitors,
                 id: selectedVisitors.id,
                 students: selectedVisitors.students,
-                userFiles: selectedVisitors.userFile
+                userFiles: selectedVisitors.userFiles
             }))
         }
         closeEmployeeDialogHandler()
@@ -177,17 +180,52 @@ export const DepartmentsPage: FC = () => {
         ${selectedVisitors.course} курс, количество студентов ${selectedVisitors.numberStudent} `.trim()
     }
 
+    const fileToBase64 = (file: any, callback: (base64String: string) => void) =>{
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+            if(reader?.result && typeof reader.result === 'string'){
+                const base64string = reader.result.split(',')[1]
+                callback(base64string)
+            } else {
+                callback('')
+            }
+        }
+    }
+
+    const fileSelectHandler = (e: any) => {
+        const file = e.target.files[0]
+        if(file) {
+            fileToBase64(file, (base64String: string) =>{
+                dispatch(uploadFile({
+                    visitorId: selectedVisitors!.id,
+                    displayName: file.name,
+                    systemName: base64String
+                }))
+            })
+        }
+    }
+
     const uploadFileHandler = () => {
-
+        fileInputRef.current?.click()
     }
 
-    const downloadFileHandler = (id: number) => {
-
+    const downloadFileHandler = (displayName: string, systemName: string) => {
+        FilesApi().downloadFile({
+            displayName,
+            systemName
+        }).then(data => {
+            const blob = new Blob([data], {'type': 'application/octet-stream'})
+            const link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = displayName
+            link.click()
+        })
     }
 
-    const deleteFileHandler = (id: number) => {
+    const deleteFileHandler = (systemName: string) => {
         if (window.confirm("Вы действительно хотите удалить данный файл?")) {
-            dispatch(deleteFile(id))
+            dispatch(deleteFile(systemName))
         }
     }
     
@@ -290,6 +328,8 @@ export const DepartmentsPage: FC = () => {
                     <TextField labelText="Результаты экзаменов" value={studentExamResults} onChange={(val) => setStudentExamResults(val)}/>
                     <TextField labelText="Посещаемость" value={studentAttending} onChange={(val) => setStudentAttending(val)}/>
                 </Dialog>
+                
+                <input type="file" onChange={fileSelectHandler} style={{display: 'none'}} ref={fileInputRef}/>
             <div className="dep-page">
                 <div className="dep-page__users-list-container">
                     <div className="dep-page__add-btn">
@@ -350,9 +390,9 @@ export const DepartmentsPage: FC = () => {
                         <div className="dep-page__user-add-info-files"> 
                             <span className="dep-page__label" >Прикрепленные файлы</span>
                             <FilesList 
+                                filesList={selectedVisitors?.userFiles ?? []}
                                 onFileDownload={downloadFileHandler}
-                                onFileDelete={deleteFileHandler}
-                                filesList={selectedVisitors?.userFile ?? []}/>
+                                onFileDelete={deleteFileHandler}/>
                         </div>
                         <div className="dep-page__user-add-info-data">
                             <div className="dep-page__user-add-info-data__cell">

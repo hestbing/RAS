@@ -134,9 +134,9 @@ export const uploadFile = createAsyncThunk<Array<Fuculty>, UploadFileResponseDto
 
 export const deleteFile = createAsyncThunk<Array<Fuculty>, string | number, AsyncThunkOptions>(
     `${NAMESPACE}/deleteFile`,
-    async(id, {rejectWithValue}) =>{
+    async(systemName, {rejectWithValue}) =>{
         try{
-            await FilesApi().deleteFile(id)
+            await FilesApi().deleteFile(systemName)
             return await FucultiesApi().getFuculties();
         }catch(error){
             return rejectWithValue((error as Error).message)

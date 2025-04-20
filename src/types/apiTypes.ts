@@ -74,11 +74,11 @@ export interface AddDepartResponseDto{
 
 export interface UploadFileResponseDto{
     visitorId: number;
-    fileString: string;
-    fileName: string;
+    systemName: string;
+    displayName: string;
 }
 
 export interface DownloadFileResponseDto{
-    sustemName: number;
+    systemName: string;
     displayName: string;
 }

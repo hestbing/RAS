@@ -1,7 +1,7 @@
-import { UserFile } from "../../types/models";
+import { UserFiles } from "../../types/models";
 
 export interface FilesListProps {
-    filesList: Array<UserFile>;
-    onFileDownload?: (id: number) => void;
-    onFileDelete?: (id: number) => void;
+    filesList: Array<UserFiles>;
+    onFileDownload?: (displayName: string, systemName: string) => void;
+    onFileDelete?: (systemName: string) => void;
 }

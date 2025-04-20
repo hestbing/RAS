@@ -26,8 +26,8 @@ export interface EditFucultiesResponseDto {
 }
 
 export interface SetRoleResponseDto{
-    userId: number;
-    roleName: 'admin' | 'manager' | 'user';
+    id: number;
+    role: 'admin' | 'manager' | 'user';
 }
 
 export interface AddVisitorResponseDto{

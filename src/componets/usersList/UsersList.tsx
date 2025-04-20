@@ -18,10 +18,6 @@ export const UsersList: FC<UsersListProps> = props => {
                                 <span>{user.login}</span>
                             </span>
                             <span>
-                                <strong>Пароль: </strong>
-                                <span>{user.password}</span>
-                            </span>
-                            <span>
                                 <strong>Роль: </strong>
                                 <span>{user.role}</span>
                             </span>

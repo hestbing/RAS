@@ -23,6 +23,12 @@ export interface WorkExpirience {
 //     workExpirience: Array<WorkExpirience>;
 // }
 
+export interface Fuculty {
+    id: number;
+    name: string;
+    visitors: Array<Visitors>;
+}
+
 export interface Visitors {
     id: number;
     dayWeek: string;
@@ -34,14 +40,7 @@ export interface Visitors {
     date: string;
     course: string;
     students: Array<Students>;
-    // workExpirience: Array<WorkExpirience>;
-}
-
-export interface Department {
-    id: number;
-    name: string;
-    description?: string;
-    visitors: Array<Visitors>;
+    userFile: Array<UserFile>;
 }
 
 export interface UserFile {
@@ -53,6 +52,5 @@ export interface UserFile {
 export interface User {
     id: number;
     login: string;
-    password: string;
     role: 'admin' | 'manager' | 'user';
 }

@@ -4,8 +4,8 @@ import { Button } from '../../componets';
 import { WidgetLayout } from '../../componets';
 import { useNavigate } from 'react-router-dom';
 import { RoutesPaths } from '../../constants/CommonConstants';
-import { AuthApi } from '../../api';
 import { AxiosError } from 'axios';
+import { AuthApi } from '../../api';
 import "./RegistrationPageStyles.scss";
 
 
@@ -23,7 +23,7 @@ export const RegistrationPage: FC = () => {
     
     const [formFields, setFormFields] = useState<RegistrationForm>()
     const [errorMessage, setErrorMessage] = useState<string>()
-    const { signUp, signIn } = AuthApi
+    const { signUp, signIn } = AuthApi()
 
     const navigate = useNavigate()
     

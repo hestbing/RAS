@@ -3,66 +3,38 @@ import { User } from '../../types/models'
 import { useNavigate } from 'react-router-dom'
 import { Layout, Button, UsersList} from '../../componets'
 import { RoutesPaths } from '../../constants/CommonConstants'
+import { getUsers, setUserRole } from '../../services'
 import './administrationPageStyles.scss'
-
-const fakeUsersListData: Array<User> =[{
-    id: 1,
-    login: 'user1',
-    password: '1234',
-    role: 'user'
-},{
-    id: 2,
-    login: 'user2',
-    password: '12345',
-    role: 'manager'
-},{
-    id: 3,
-    login: 'user3',
-    password: '123456',
-    role: 'admin'
-}]
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxToolkitHooks'
 
 export const AdministrationPage: FC = () => {
-    const [users, setUsers] = useState<Array<User>>([])
+    const { users } = useAppSelector((state) => state.administration)
+    const { accessToken, role } = useAppSelector((state) => state.user)
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    useEffect (() => {
-        setTimeout(() => {
-            setUsers(fakeUsersListData)
-        }, 500)
-    }, [])
+    useEffect(() => {
+        if(accessToken) {
+            if(role === 'user' || role === 'manager' || !role) {
+                navigate(`${RoutesPaths.NoPermissions}`)
+            } else {
+                dispatch(getUsers())
+            }
+        } else {
+            navigate(`${RoutesPaths.Login}`)
+        }
+    }, [accessToken, role, navigate, dispatch])
 
     const setAdminRoleHandler = (id: number) => {
-        setUsers (prev => {
-            const cloneArray = [...prev]
-            const currentUser = cloneArray.find(u => u.id === id)
-            if(currentUser) {
-                currentUser.role = 'manager'
-            }
-            return cloneArray
-        })
+        dispatch(setUserRole({id: id, role: 'admin'}))
     }
 
     const setManagerRoleHandler = (id: number) => {
-        setUsers (prev => {
-            const cloneArray = [...prev]
-            const currentUser = cloneArray.find(u => u.id === id)
-            if(currentUser) {
-                currentUser.role = 'admin'
-            }
-            return cloneArray
-        })
+        dispatch(setUserRole({id: id, role: 'manager'}))
     }
 
     const resetPermissionsHandler = (id: number) => {
-        setUsers (prev => {
-            const cloneArray = [...prev]
-            const currentUser = cloneArray.find(u => u.id === id)
-            if(currentUser) {
-                currentUser.role = 'user'
-            }
-            return cloneArray
-        })
+        dispatch(setUserRole({id: id, role: 'user'}))
     }
 
     return(
@@ -71,10 +43,11 @@ export const AdministrationPage: FC = () => {
             onClick={() => navigate(`/${RoutesPaths.Departments}`)}
             className='button'
             type='primary'/>
-            <UsersList onSetAdminRole = {setAdminRoleHandler}
+            <UsersList usersList = {users}
+                onSetAdminRole = {setAdminRoleHandler}
                 onSetManagerRole = {setManagerRoleHandler}
                 onResetPermissions={resetPermissionsHandler}
-                usersList = {users}/>
+            />
         </Layout>
     )
 }

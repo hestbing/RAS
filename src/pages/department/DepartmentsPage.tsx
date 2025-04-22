@@ -12,6 +12,7 @@ import { RoutesPaths } from "../../constants/CommonConstants";
 import './departmentsPageStyles.scss';
 import { addDepart, addFuculties, addVisitors, deleteDepart, deleteFile, deleteFuculties, deleteVisitors, editFuculties, editVisitors, getFuculties, uploadFile } from "../../services";
 import { FilesApi } from "../../api";
+import { sendPrompt } from "../../api/gen";
 
 export const DepartmentsPage: FC = () => {
     const { accessToken, role } = useAppSelector((state) => state.user)
@@ -136,7 +137,7 @@ export const DepartmentsPage: FC = () => {
             nameGroup,
             numberStudent,
             numberVisitors,
-            date,
+            date: new Date().toUTCString(),
             course
         }
     
@@ -402,26 +403,7 @@ export const DepartmentsPage: FC = () => {
                                         <PlusIcon width={16} height={16} className="dep-page__add-btn" onClick={() => setShowStudentDialog(true)}/>
                                     )}
                                 </div>    
-                                <StudDepartmentList StudDepartmentList={selectedVisitors?.students ?? []} onDelete={(id) => {
-                                    if(window.confirm('Вы действительно хотите удалить данную запись об студенте?')){
-                                        dispatch(deleteDepart(id));
-                                    }
-                                }} />
-                            </div>
-                            <div className="dep-page__user-add-info-data__cell"> 
-                                <div className="dep-page__list-title">
-                                    <span className="dep-page__label">Данные о работе</span>
-                                    <PlusIcon width={16} height={16} />
-                                </div>
-                                <WorkExperienceList workExperienceList={[{
-                                    id: 1,
-                                    workedYears: 3,
-                                    description: 'Завод 1'
-                                },{
-                                    id: 2,
-                                    workedYears: 2,
-                                    description: 'Завод 2'
-                                }]} />
+                                <StudDepartmentList StudDepartmentList={selectedVisitors?.students ?? []} onDelete={() => sendPrompt('расчитать 33 + 55')} />
                             </div>
                         </div>
                     </div>

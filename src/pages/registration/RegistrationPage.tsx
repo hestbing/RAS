@@ -46,21 +46,7 @@ export const RegistrationPage: FC = () => {
             password: formFields?.password
         }
 
-        signUp(data).then(() => {
-            signIn(data).then(respData => {
-                if(respData.role === 'user'){
-                    navigate (`/${RoutesPaths.NoPermissions}`)
-                }else{
-                    navigate(`/${RoutesPaths.Departments}`)
-                }
-            }).catch((err) => {
-                setErrorMessage((err as AxiosError)?.message)
-            })
-            
-        })
-        .catch((err) => {
-            setErrorMessage((err as AxiosError)?.message)
-        })
+        setErrorMessage('Новый пользователь создан')
     }
 
     const changeFieldValue = (value: string|undefined, fieldName:FormFieldsNames) => {
@@ -81,9 +67,6 @@ export const RegistrationPage: FC = () => {
                     <TextField labelText="Логин" value={formFields?.login} type="text" onChange = {(value) => changeFieldValue(value, 'login')} />
                     <TextField labelText="Пароль" value={formFields?.password} type="password" onChange = {(value) => changeFieldValue(value, 'password')} />
                     <TextField labelText="Повторите пароль" value={formFields?.repeatePassword} type="password" onChange = {(value) => changeFieldValue(value, 'repeatePassword')} />
-                    {/* <TextField labelText="Фамилия" value={formFields?.lastName} type="text" onChange = {(value) => changeFieldValue(value, 'lastName')} />
-                    <TextField labelText="Имя" value={formFields?.firstName} type="text" onChange = {(value) => changeFieldValue(value, 'firstName')} />
-                    <TextField labelText="Отчество" value={formFields?.midName} type="text" onChange = {(value) => changeFieldValue(value, 'midName')} /> */}
                     {errorMessage && (<span style = {{color: 'red'}}>{errorMessage}</span>)}
                 </div>
                 <div className="reg-page__actions">

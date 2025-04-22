@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { StudDepartmentListProps } from "./StudDepartmentListProps";
-import { TrashIcon } from "../../assets";
+import { UploadIcon } from "../../assets";
 import './studDepartmentListStyles.scss'
 
 export const StudDepartmentList: FC<StudDepartmentListProps> = props =>{
     const { StudDepartmentList, onDelete } = props
 
-    const deleteHandler = (id: number) => {
-        onDelete && onDelete(id)
+    const deleteHandler = () => {
+        onDelete && onDelete()
     }
 
     return(
@@ -20,7 +20,7 @@ export const StudDepartmentList: FC<StudDepartmentListProps> = props =>{
                                 <span className="education-list__item-descr-descrription">{education.examResults}</span>
                             </div>
                             <div className="education-list__item-action">
-                                <TrashIcon width={16} height={16} onClick={() => {deleteHandler(education.id)}}/>
+                                <UploadIcon width={16} height={16} onClick={() => {deleteHandler()}}/>
                             </div>
                         </div>
                     )
